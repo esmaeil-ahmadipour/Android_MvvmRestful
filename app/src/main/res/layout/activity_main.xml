@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+        name="user"
+        type="ir.ea2.android_mvvm_restful.viewmodel.UserViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:text="@={user.name}"
+            android:id="@+id/ac_main_edt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ac_main_edt_name_hint"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/ac_main_edt_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ac_main_edt_phone_hint"
+            android:inputType="phone" />
+
+        <TextView
+            android:background="@color/colorAccent"
+            android:text="@{user.name}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+
+    </LinearLayout>
+
+</layout>

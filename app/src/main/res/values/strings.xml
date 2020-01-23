@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Android_Mvvm_Restful</string>
+    <string name="ac_main_edt_name_hint">Enter Your Name.</string>
+    <string name="ac_main_edt_phone_hint">Enter Your PhoneNumber.</string>
+</resources>
