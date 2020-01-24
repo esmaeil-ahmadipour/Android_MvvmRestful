@@ -20,8 +20,7 @@ public class UserViewModel extends BaseObservable {
     private Context context;
     private String name;
     private String phoneNumber;
-    private MutableLiveData<ArrayList<UserViewModel>> arrayListMutableLiveData = new MutableLiveData<>();
-    private ArrayList<UserViewModel> arrayListHolder = new ArrayList<>();
+    private ArrayList<UserViewModel> arrayListMutableLiveData = new ArrayList<>();
 
     //When use ViewModel we Have UserObject and UserData
     public UserViewModel(User user) {
@@ -36,9 +35,8 @@ public class UserViewModel extends BaseObservable {
         for (int i = 0; i < 150; i++) {
             User user = new User("StudentID_" + i, "  093-000-000" + i);
             UserViewModel model = new UserViewModel(user);
-            arrayListHolder.add(model);
+            arrayListMutableLiveData.add(model);
         }
-        arrayListMutableLiveData.setValue(arrayListHolder);
     }
 
     @Bindable
@@ -61,23 +59,22 @@ public class UserViewModel extends BaseObservable {
         notifyPropertyChanged(BR.phoneNumber);
 
     }
-
-    public MutableLiveData<ArrayList<UserViewModel>> getArrayListMutableLiveData() {
+@Bindable
+    public ArrayList<UserViewModel> getArrayListMutableLiveData() {
         return arrayListMutableLiveData;
+    }
+
+    public void setArrayListMutableLiveData(ArrayList<UserViewModel> arrayListMutableLiveData) {
+        this.arrayListMutableLiveData = arrayListMutableLiveData;
+        notifyPropertyChanged(BR.arrayListMutableLiveData);
     }
 
     //automatically BindingAdapter Passing RecyclerView To Owen Method .
     //for Passing MutableLiveData to this Method we Going To activity_main.xml >> RecyclerView >> bind TAG.
     @BindingAdapter("bind:recyclerViewUser")
-    public static void recyclerUserBinder(final RecyclerView recyclerView,final MutableLiveData<ArrayList<UserViewModel>> arrayListMutableLiveData) {
-        arrayListMutableLiveData.observe((LifecycleOwner) recyclerView.getContext(), new Observer<ArrayList<UserViewModel>>() {
-            @Override
-            public void onChanged(ArrayList<UserViewModel> userViewModels) {
-                UserAdapter userAdapter = new UserAdapter(userViewModels);
+    public static void recyclerUserBinder(final RecyclerView recyclerView,final ArrayList<UserViewModel> arrayListMutableLiveData) {
+                UserAdapter userAdapter = new UserAdapter(arrayListMutableLiveData);
                 recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext() , RecyclerView.VERTICAL , false));
                 recyclerView.setAdapter(userAdapter);
-            }
-        });
     }
-
 }
