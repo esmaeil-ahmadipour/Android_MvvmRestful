@@ -1,7 +1,14 @@
 package ir.ea2.android_mvvm_restful.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class User {
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("phone")
+    @Expose
     private String phoneNumber;
 
     public User(String name, String phoneNumber) {

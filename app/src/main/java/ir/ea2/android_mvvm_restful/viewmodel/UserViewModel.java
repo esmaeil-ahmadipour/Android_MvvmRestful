@@ -9,11 +9,11 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ir.ea2.android_mvvm_restful.model.User;
+import ir.ea2.android_mvvm_restful.remote.user.UsersRepository;
 import ir.ea2.android_mvvm_restful.view.adapter.UserAdapter;
 
 public class UserViewModel extends BaseObservable {
@@ -32,11 +32,19 @@ public class UserViewModel extends BaseObservable {
     public UserViewModel(Context context) {
         this.context = context;
         //Connect to Api Server.
-        for (int i = 0; i < 150; i++) {
-            User user = new User("StudentID_" + i, "  093-000-000" + i);
-            UserViewModel model = new UserViewModel(user);
-            arrayListMutableLiveData.add(model);
-        }
+        UsersRepository usersRepository = new UsersRepository();
+        usersRepository.getUsers();
+        usersRepository.getMutableLiveData()
+                .observe((LifecycleOwner) context, new Observer<ArrayList<User>>() {
+                    @Override
+                    public void onChanged(ArrayList<User> users) {
+                        for (int i = 0; i < users.size() ; i++) {
+                            UserViewModel userViewModel = new UserViewModel(users.get(i));
+                            arrayListMutableLiveData.add(userViewModel);
+                       notifyPropertyChanged(BR.arrayListMutableLiveData);
+                        }
+                    }
+                });
     }
 
     @Bindable
@@ -59,7 +67,8 @@ public class UserViewModel extends BaseObservable {
         notifyPropertyChanged(BR.phoneNumber);
 
     }
-@Bindable
+
+    @Bindable
     public ArrayList<UserViewModel> getArrayListMutableLiveData() {
         return arrayListMutableLiveData;
     }
@@ -72,9 +81,10 @@ public class UserViewModel extends BaseObservable {
     //automatically BindingAdapter Passing RecyclerView To Owen Method .
     //for Passing MutableLiveData to this Method we Going To activity_main.xml >> RecyclerView >> bind TAG.
     @BindingAdapter("bind:recyclerViewUser")
-    public static void recyclerUserBinder(final RecyclerView recyclerView,final ArrayList<UserViewModel> arrayListMutableLiveData) {
-                UserAdapter userAdapter = new UserAdapter(arrayListMutableLiveData);
-                recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext() , RecyclerView.VERTICAL , false));
-                recyclerView.setAdapter(userAdapter);
+    public static void recyclerUserBinder(final RecyclerView recyclerView, final ArrayList<UserViewModel> arrayListMutableLiveData) {
+        UserAdapter userAdapter = new UserAdapter(arrayListMutableLiveData);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(userAdapter);
     }
+
 }
